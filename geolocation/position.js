@@ -25,7 +25,7 @@ export default function Position(){
 
              
         })()
-    })
+    },[])
     
     return (
         <View style={styles.screen}>
