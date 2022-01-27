@@ -4,7 +4,12 @@ import {View, Text, StyleSheet, Dimensions} from 'react-native'
 import MapView, {Marker} from 'react-native-maps'
 
 export default function Position(){
-    const [coords, setCoords] = useState({latitude:0, longitude: 0})
+    const [region, setRegion] = useState({
+                                    latitude: 0,
+                                    longitude: 0,
+                                    latitudeDelta: 0.0922,
+                                    longitudeDelta: 0.0421,
+                                })
     
    
     useEffect(()=>{
@@ -18,11 +23,18 @@ export default function Position(){
                 }
 
                 let location = await Location.getCurrentPositionAsync({})
-                setCoords(location.coords)
+    
+                setRegion({
+                                    latitude: location.coords.latitude,
+                                    longitude: location.coords.longitude,
+                                    latitudeDelta: 0.0922,
+                                    longitudeDelta: 0.0421,
+                                })
             }catch(e){
                 console.log(e)
             }
 
+            
              
         })()
     },[])
@@ -31,20 +43,13 @@ export default function Position(){
         <View style={styles.screen}>
                 <Text style={styles.title}>Sua localização</Text>
                 <View style={styles.container}>
-                    <Text style={styles.paragraph}>Latitude: {coords.latitude}</Text>
-                    <Text style={styles.paragraph}>Longitude: {coords.longitude}</Text>
+                    <Text style={styles.paragraph}>Latitude: {region.latitude}</Text>
+                    <Text style={styles.paragraph}>Longitude: {region.longitude}</Text>
 
-                        <MapView style={styles.map} initialRegion={
-                                {
-                                    latitude: coords.latitude,
-                                    longitude: coords.longitude,
-                                    latitudeDelta: 0.0922,
-                                    longitudeDelta: 0.0421,
-                                }
-                        }>
+                        <MapView style={styles.map} region={ region }>
                             {
                                 <Marker
-                                coordinate={{ latitude : coords.latitude , longitude : coords.longitude }}
+                                coordinate={{ latitude : region.latitude, longitude : region.longitude }}
                                 />
                             }
                                 
